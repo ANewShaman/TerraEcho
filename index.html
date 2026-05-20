@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TerraEcho &mdash; Earth's environmental story, told across time." />
+  <meta name="color-scheme" content="light dark" />
+  <title>TerraEcho</title>
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Stylesheets — load order is intentional -->
+  <link rel="stylesheet" href="src/css/base.css" />
+  <link rel="stylesheet" href="src/css/theme.css" />
+  <link rel="stylesheet" href="src/css/components.css" />
+  <link rel="stylesheet" href="src/css/timeline.css" />
+  <link rel="stylesheet" href="src/css/actions.css" />
+
+  <!-- Prevent flash of wrong theme: apply stored theme before paint -->
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('terraecho:theme');
+        var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', stored || system);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <!-- ══════════════════════════════════════════════════════
+         NAVIGATION BAR
+         Targets: #theme-toggle (themeToggle.js)
+         ══════════════════════════════════════════════════════ -->
+    <nav class="nav" role="banner" aria-label="TerraEcho navigation">
+      <div class="nav__inner">
+
+        <!-- Wordmark -->
+        <div class="nav__wordmark" aria-label="TerraEcho">
+          <span class="nav__wordmark-primary">TerraEcho</span>
+          <span class="nav__wordmark-dot" aria-hidden="true"></span>
+          <span class="nav__wordmark-sub">Earth Narratives</span>
+        </div>
+
+        <!-- Right-side actions -->
+        <div class="nav__actions">
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            aria-label="Switch to dark mode"
+            title="Switch to dark mode"
+            type="button"
+          >
+            <span class="theme-toggle__icon" aria-hidden="true">◑</span>
+            <span class="theme-toggle__label">Dark</span>
+          </button>
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- ══════════════════════════════════════════════════════
+         TAB BAR
+         Targets: [role="tab"][data-tab] (tabs.js)
+         ══════════════════════════════════════════════════════ -->
+    <div class="tab-bar" role="tablist" aria-label="TerraEcho sections">
+
+      <div class="tab-bar__inner">
+
+        <button
+          id="tab-btn-timeline"
+          class="tab-btn"
+          role="tab"
+          data-tab="timeline"
+          aria-selected="true"
+          aria-controls="panel-timeline"
+          tabindex="0"
+        >
+          <span class="tab-btn__number" aria-hidden="true">01</span>
+          Earth Timeline
+        </button>
+
+        <button
+          id="tab-btn-actions"
+          class="tab-btn"
+          role="tab"
+          data-tab="actions"
+          aria-selected="false"
+          aria-controls="panel-actions"
+          tabindex="-1"
+        >
+          <span class="tab-btn__number" aria-hidden="true">02</span>
+          Action Impact
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         APP CONTENT — TAB PANELS
+         ══════════════════════════════════════════════════════ -->
+    <main class="app-content">
+
+      <!-- ────────────────────────────────────────────────────
+           TAB 1: EARTH TIMELINE
+           Panel targets: tabs.js (aria-hidden)
+           Inner targets: timelineControls.js, bars.js,
+                          metricCards.js, factDisplay.js
+           ──────────────────────────────────────────────────── -->
+      <section
+        id="panel-timeline"
+        class="tab-panel timeline-tab"
+        role="tabpanel"
+        data-tab="timeline"
+        aria-labelledby="tab-btn-timeline"
+        aria-hidden="false"
+      >
+        <div class="timeline-tab__inner">
+
+          <div class="timeline-grid">
+
+            <!-- ──────────────────────────────────────────────
+                 LEFT COLUMN: Timeline controls
+                 Targets: #year-display (timelineControls.js)
+                           #timeline-slider (timelineControls.js)
+                           #play-btn (timelineControls.js)
+                 ──────────────────────────────────────────── -->
+            <aside class="timeline-controls" aria-label="Timeline controls">
+
+              <!-- Year display -->
+              <div class="year-display" id="year-display">
+                <span class="year-display__label">Exploring year</span>
+                <span
+                  class="year-display__number"
+                  id="year-number"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >1900</span>
+                <span class="year-display__range">1900 — 2024</span>
+              </div>
+
+              <!-- Slider -->
+              <div class="slider-wrapper">
+                <input
+                  id="timeline-slider"
+                  class="slider-track"
+                  type="range"
+                  min="1900"
+                  max="2024"
+                  value="1900"
+                  step="1"
+                  aria-label="Timeline year slider"
+                  aria-valuemin="1900"
+                  aria-valuemax="2024"
+                  aria-valuenow="1900"
+                  aria-valuetext="Year 1900"
+                  disabled
+                />
+                <!-- disabled removed in Phase 2 by timelineControls.js -->
+                <div class="slider-labels" aria-hidden="true">
+                  <span>1900</span>
+                  <span>1950</span>
+                  <span>2000</span>
+                  <span>2024</span>
+                </div>
+              </div>
+
+              <!-- Play button -->
+              <button
+                id="play-btn"
+                class="play-btn"
+                type="button"
+                aria-label="Play timeline animation"
+                disabled
+              >
+                <!-- disabled removed in Phase 2 by timelineControls.js -->
+                <svg
+                  class="play-btn__icon"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M4 2.5l9 5.5-9 5.5V2.5z"/>
+                </svg>
+                Play
+              </button>
+
+              <!-- Epoch markers — key fact years -->
+              <div class="epoch-markers" aria-label="Key historical years">
+                <p class="epoch-markers__label">Key moments</p>
+
+                <div class="epoch-marker" data-year="1900">
+                  <span class="epoch-marker__dot" aria-hidden="true"></span>
+                  <span class="epoch-marker__year">1900</span>
+                  <span>Industrial dawn</span>
+                </div>
+                <div class="epoch-marker" data-year="1950">
+                  <span class="epoch-marker__dot" aria-hidden="true"></span>
+                  <span class="epoch-marker__year">1950</span>
+                  <span>Post-war growth</span>
+                </div>
+                <div class="epoch-marker" data-year="1970">
+                  <span class="epoch-marker__dot" aria-hidden="true"></span>
+                  <span class="epoch-marker__year">1970</span>
+                  <span>Earth Day era</span>
+                </div>
+                <div class="epoch-marker" data-year="1990">
+                  <span class="epoch-marker__dot" aria-hidden="true"></span>
+                  <span class="epoch-marker__year">1990</span>
+                  <span>Climate awakening</span>
+                </div>
+                <div class="epoch-marker" data-year="2010">
+                  <span class="epoch-marker__dot" aria-hidden="true"></span>
+                  <span class="epoch-marker__year">2010</span>
+                  <span>Tipping points</span>
+                </div>
+                <div class="epoch-marker" data-year="2024">
+                  <span class="epoch-marker__dot" aria-hidden="true"></span>
+                  <span class="epoch-marker__year">2024</span>
+                  <span>Present</span>
+                </div>
+
+              </div>
+
+            </aside>
+
+            <!-- ──────────────────────────────────────────────
+                 CENTER COLUMN: Metric bars
+                 Targets: #bar-forest, #bar-ice, #bar-co2 (bars.js)
+                           .bar-fill (bars.js sets inline width)
+                 ──────────────────────────────────────────── -->
+            <section class="metric-bars" aria-label="Environmental metrics">
+
+              <div class="metric-bars__header">
+                <h2 class="metric-bars__title">Earth's vital signs</h2>
+                <p class="metric-bars__subtitle">As recorded through time</p>
+              </div>
+
+              <!-- Forest cover bar -->
+              <div class="bar-row" id="bar-row-forest">
+                <div class="bar-row__header">
+                  <span class="bar-row__label">Forest Cover</span>
+                  <span class="bar-row__value">
+                    <span id="bar-value-forest" class="placeholder" style="width:3ch;display:inline-block;">—</span>
+                    <span class="bar-row__unit">% of land</span>
+                  </span>
+                </div>
+                <div class="bar-track" role="progressbar" aria-label="Forest cover" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">
+                  <div
+                    id="bar-fill-forest"
+                    class="bar-fill bar-fill--forest bar-fill--placeholder-forest"
+                    aria-hidden="true"
+                  ></div>
+                </div>
+                <div class="bar-row__meta" aria-hidden="true">
+                  <span>0%</span>
+                  <span>Baseline 1900</span>
+                  <span>100%</span>
+                </div>
+              </div>
+
+              <!-- Arctic ice bar -->
+              <div class="bar-row" id="bar-row-ice">
+                <div class="bar-row__header">
+                  <span class="bar-row__label">Arctic Sea Ice</span>
+                  <span class="bar-row__value">
+                    <span id="bar-value-ice" class="placeholder" style="width:4ch;display:inline-block;">—</span>
+                    <span class="bar-row__unit">million km²</span>
+                  </span>
+                </div>
+                <div class="bar-track" role="progressbar" aria-label="Arctic sea ice extent" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+                  <div
+                    id="bar-fill-ice"
+                    class="bar-fill bar-fill--ice bar-fill--placeholder-ice"
+                    aria-hidden="true"
+                  ></div>
+                </div>
+                <div class="bar-row__meta" aria-hidden="true">
+                  <span>0</span>
+                  <span>Relative to 1900 maximum</span>
+                  <span>14M km²</span>
+                </div>
+              </div>
+
+              <!-- CO2 bar -->
+              <div class="bar-row" id="bar-row-co2">
+                <div class="bar-row__header">
+                  <span class="bar-row__label">Atmospheric CO₂</span>
+                  <span class="bar-row__value">
+                    <span id="bar-value-co2" class="placeholder" style="width:3ch;display:inline-block;">—</span>
+                    <span class="bar-row__unit">ppm</span>
+                  </span>
+                </div>
+                <div class="bar-track" role="progressbar" aria-label="Atmospheric CO2" aria-valuenow="42" aria-valuemin="0" aria-valuemax="100">
+                  <div
+                    id="bar-fill-co2"
+                    class="bar-fill bar-fill--co2 bar-fill--placeholder-co2"
+                    aria-hidden="true"
+                  ></div>
+                </div>
+                <div class="bar-row__meta" aria-hidden="true">
+                  <span>280 ppm</span>
+                  <span>Pre-industrial baseline</span>
+                  <span>430 ppm</span>
+                </div>
+              </div>
+
+            </section>
+
+            <!-- ──────────────────────────────────────────────
+                 RIGHT COLUMN: Fact card + Metric cards
+                 Targets: #fact-text, #fact-year-badge (factDisplay.js)
+                           #metric-species, #metric-temp, #metric-sea (metricCards.js)
+                 ──────────────────────────────────────────── -->
+            <aside class="timeline-sidebar" aria-label="Year context and metrics">
+
+              <!-- Fact card -->
+              <article class="fact-card" aria-label="Historical context">
+                <div class="fact-card__epoch-bar" aria-hidden="true"></div>
+                <div class="fact-card__body">
+                  <p class="fact-card__label">Field note</p>
+                  <div id="fact-year-badge" class="fact-card__year-badge" aria-label="Active year">
+                    1900
+                  </div>
+                  <p
+                    id="fact-text"
+                    class="fact-card__text"
+                    aria-live="polite"
+                    aria-atomic="true"
+                  >
+                    At the turn of the twentieth century, vast forests still blanketed
+                    the continents. The atmosphere held 295 parts per million of CO₂ —
+                    a world before the great acceleration.
+                  </p>
+                  <p class="fact-card__source">
+                    <!-- Phase 2: factDisplay.js populates source citation -->
+                    Source data wired in Phase 2
+                  </p>
+                </div>
+              </article>
+
+              <!-- Metric cards -->
+              <div class="metric-cards" aria-label="Key metrics">
+
+                <div class="metric-card metric-card--species" aria-label="Species at risk">
+                  <span class="metric-card__label">Species at Risk</span>
+                  <span
+                    id="metric-species"
+                    class="metric-card__value"
+                    aria-live="polite"
+                  >—</span>
+                  <span class="metric-card__unit">threatened species</span>
+                </div>
+
+                <div class="metric-card metric-card--temp" aria-label="Temperature anomaly">
+                  <span class="metric-card__label">Temperature Anomaly</span>
+                  <span
+                    id="metric-temp"
+                    class="metric-card__value"
+                    aria-live="polite"
+                  >—</span>
+                  <span class="metric-card__unit">°C above pre-industrial</span>
+                </div>
+
+                <div class="metric-card metric-card--sea" aria-label="Sea level rise">
+                  <span class="metric-card__label">Sea Level Rise</span>
+                  <span
+                    id="metric-sea"
+                    class="metric-card__value"
+                    aria-live="polite"
+                  >—</span>
+                  <span class="metric-card__unit">mm above 1900 baseline</span>
+                </div>
+
+              </div>
+
+            </aside>
+
+          </div><!-- /.timeline-grid -->
+
+        </div><!-- /.timeline-tab__inner -->
+      </section><!-- /#panel-timeline -->
+
+
+      <!-- ────────────────────────────────────────────────────
+           TAB 2: ACTION IMPACT
+           Panel targets: tabs.js (aria-hidden)
+           Inner targets: actionCards.js, impactSummary.js, milestone.js
+           ──────────────────────────────────────────────────── -->
+      <section
+        id="panel-actions"
+        class="tab-panel actions-tab"
+        role="tabpanel"
+        data-tab="actions"
+        aria-labelledby="tab-btn-actions"
+        aria-hidden="true"
+      >
+        <div class="actions-tab__inner">
+
+          <!-- Tab header -->
+          <header class="actions-header">
+            <h2 class="actions-header__title">Every choice leaves a mark.</h2>
+            <p class="actions-header__subtitle">Log your actions. Watch the impact grow.</p>
+          </header>
+
+          <!-- ────────────────────────────────────────────────
+               ACTION CARD GRID
+               Targets: .action-card[data-action] (actionCards.js)
+                         .action-card__count (actionCards.js)
+               ──────────────────────────────────────────── -->
+          <section aria-label="Log your environmental actions">
+            <p class="section-label">Actions</p>
+
+            <div class="action-grid" id="action-grid">
+
+              <!-- Reusable bottle -->
+              <button
+                class="action-card"
+                data-action="bottle"
+                type="button"
+                aria-label="Log reusable bottle use"
+                aria-pressed="false"
+              >
+                <span class="action-card__count" id="count-bottle" aria-label="0 times logged">0</span>
+                <div class="action-card__icon-wrap" aria-hidden="true">🍶</div>
+                <span class="action-card__name">Reusable Bottle</span>
+                <span class="action-card__impact-hint">~0.08 kg CO₂ saved</span>
+              </button>
+
+              <!-- Avoided plastic -->
+              <button
+                class="action-card"
+                data-action="plastic"
+                type="button"
+                aria-label="Log avoided single-use plastic"
+                aria-pressed="false"
+              >
+                <span class="action-card__count" id="count-plastic" aria-label="0 times logged">0</span>
+                <div class="action-card__icon-wrap" aria-hidden="true">🚫</div>
+                <span class="action-card__name">Avoided Plastic</span>
+                <span class="action-card__impact-hint">~0.03 kg CO₂ saved</span>
+              </button>
+
+              <!-- Planted tree -->
+              <button
+                class="action-card"
+                data-action="tree"
+                type="button"
+                aria-label="Log a tree planted"
+                aria-pressed="false"
+              >
+                <span class="action-card__count" id="count-tree" aria-label="0 times logged">0</span>
+                <div class="action-card__icon-wrap" aria-hidden="true">🌱</div>
+                <span class="action-card__name">Planted Tree</span>
+                <span class="action-card__impact-hint">~21 kg CO₂/yr absorbed</span>
+              </button>
+
+              <!-- Cycled -->
+              <button
+                class="action-card"
+                data-action="cycled"
+                type="button"
+                aria-label="Log a cycling trip instead of driving"
+                aria-pressed="false"
+              >
+                <span class="action-card__count" id="count-cycled" aria-label="0 times logged">0</span>
+                <div class="action-card__icon-wrap" aria-hidden="true">🚲</div>
+                <span class="action-card__name">Cycled</span>
+                <span class="action-card__impact-hint">~0.21 kg CO₂ per km</span>
+              </button>
+
+              <!-- Plant-based meal -->
+              <button
+                class="action-card"
+                data-action="meal"
+                type="button"
+                aria-label="Log a plant-based meal"
+                aria-pressed="false"
+              >
+                <span class="action-card__count" id="count-meal" aria-label="0 times logged">0</span>
+                <div class="action-card__icon-wrap" aria-hidden="true">🥗</div>
+                <span class="action-card__name">Plant-Based Meal</span>
+                <span class="action-card__impact-hint">~1.5 kg CO₂ saved vs beef</span>
+              </button>
+
+              <!-- Short shower -->
+              <button
+                class="action-card"
+                data-action="shower"
+                type="button"
+                aria-label="Log a short shower"
+                aria-pressed="false"
+              >
+                <span class="action-card__count" id="count-shower" aria-label="0 times logged">0</span>
+                <div class="action-card__icon-wrap" aria-hidden="true">🚿</div>
+                <span class="action-card__name">Short Shower</span>
+                <span class="action-card__impact-hint">~50 L water saved</span>
+              </button>
+
+            </div><!-- /#action-grid -->
+
+          </section>
+
+          <!-- ────────────────────────────────────────────────
+               MILESTONE CARD (placeholder — hidden until Phase 3)
+               Targets: #milestone-card (milestone.js)
+               ──────────────────────────────────────────── -->
+          <div
+            id="milestone-card"
+            class="milestone-card milestone-card--hidden"
+            role="status"
+            aria-live="polite"
+            aria-label="Milestone reached"
+          >
+            <div class="milestone-card__accent-bar" aria-hidden="true"></div>
+            <div class="milestone-card__body">
+              <span class="milestone-card__icon" aria-hidden="true">🌿</span>
+              <div class="milestone-card__content">
+                <span class="milestone-card__badge">Milestone Reached</span>
+                <h3 class="milestone-card__title" id="milestone-title">
+                  You're making a difference
+                </h3>
+                <p class="milestone-card__text" id="milestone-text">
+                  <!-- Phase 3: milestone.js populates this -->
+                  Your actions have already prevented meaningful emissions.
+                  This is what change looks like — one decision at a time.
+                </p>
+                <p class="milestone-card__impact" id="milestone-impact">
+                  <!-- Phase 3: impactSummary.js value injected here -->
+                </p>
+                <div class="milestone-card__footer">
+                  <a
+                    id="milestone-donate-btn"
+                    class="milestone-card__donate-btn"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Support environmental action — opens in new tab"
+                  >
+                    Support the cause ↗
+                  </a>
+                  <button
+                    id="milestone-dismiss"
+                    class="milestone-card__dismiss"
+                    type="button"
+                    aria-label="Dismiss milestone card"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div><!-- /#milestone-card -->
+
+          <!-- ────────────────────────────────────────────────
+               IMPACT SUMMARY
+               Targets: #impact-co2, #impact-water, #impact-trees (impactSummary.js)
+               ──────────────────────────────────────────── -->
+          <section class="impact-summary" aria-label="Cumulative impact summary">
+            <div class="impact-summary__header">
+              <p class="impact-summary__title section-label">Your impact so far</p>
+            </div>
+
+            <div class="impact-stats">
+
+              <div class="impact-stat" aria-label="CO2 saved">
+                <span class="impact-stat__icon" aria-hidden="true">💨</span>
+                <span
+                  class="impact-stat__value"
+                  id="impact-co2"
+                  aria-live="polite"
+                >0.00</span>
+                <span class="impact-stat__label">kg CO₂ saved</span>
+              </div>
+
+              <div class="impact-stat" aria-label="Water saved">
+                <span class="impact-stat__icon" aria-hidden="true">💧</span>
+                <span
+                  class="impact-stat__value"
+                  id="impact-water"
+                  aria-live="polite"
+                >0</span>
+                <span class="impact-stat__label">litres water saved</span>
+              </div>
+
+              <div class="impact-stat" aria-label="Tree equivalents">
+                <span class="impact-stat__icon" aria-hidden="true">🌳</span>
+                <span
+                  class="impact-stat__value"
+                  id="impact-trees"
+                  aria-live="polite"
+                >0.0</span>
+                <span class="impact-stat__label">tree equivalents</span>
+              </div>
+
+            </div>
+
+          </section><!-- /.impact-summary -->
+
+        </div><!-- /.actions-tab__inner -->
+      </section><!-- /#panel-actions -->
+
+    </main>
+
+  </div><!-- /.app-shell -->
+
+  <!-- Module entry point — deferred, type="module" for ES module support -->
+  <script type="module" src="src/js/main.js"></script>
+
+</body>
+</html>
