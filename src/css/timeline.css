@@ -121,14 +121,14 @@
   cursor: grab;
 }
 
-/* Webkit track fill (before thumb) — Phase 2 will handle dynamically */
+/* Webkit track fill — timelineControls.js sets --pct via style.setProperty */
 .slider-track::-webkit-slider-runnable-track {
   height: 4px;
   border-radius: var(--radius-full);
   background: linear-gradient(
     to right,
-    var(--color-accent) 0%,
-    var(--color-border) 0%
+    var(--color-accent) var(--pct, 0%),
+    var(--color-border) var(--pct, 0%)
   );
 }
 
