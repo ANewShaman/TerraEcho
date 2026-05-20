@@ -1,0 +1,217 @@
+/* ============================================================
+   TerraEcho — theme.css
+   Responsibility: Color token definitions only.
+   Sets --color-* variables for light and dark themes.
+   themeToggle.js controls [data-theme] on <html>.
+   ============================================================ */
+
+/* ── Design rationale ────────────────────────────────────── *
+   Light theme: aged cartographic paper — warm off-whites,
+   deep forest ink, terracotta accents.
+   Dark theme: night field observation — deep charcoal earth,
+   muted sage, amber instrument glow.
+   Both themes avoid pure black/white for organic warmth.
+   * ────────────────────────────────────────────────────────── */
+
+/* ── Light theme (default) ───────────────────────────────── */
+:root,
+[data-theme="light"] {
+
+  /* Backgrounds — layered warmth */
+  --color-bg:              #F5F0E8;   /* aged parchment */
+  --color-bg-subtle:       #EDE8DC;   /* slightly darker parchment */
+  --color-bg-raised:       #FAF7F2;   /* elevated card surface */
+  --color-surface:         #FFFFFF;   /* pure surface for contrast */
+  --color-surface-overlay: rgba(245, 240, 232, 0.92);
+
+  /* Foreground — deep forest ink */
+  --color-text:            #1C2B1E;   /* near-black forest green */
+  --color-text-secondary:  #4A5C4D;   /* mid forest */
+  --color-text-tertiary:   #7A8F7D;   /* faded field note */
+  --color-text-disabled:   #AEBDB1;   /* muted */
+  --color-text-inverse:    #F5F0E8;   /* on dark surfaces */
+
+  /* Brand / accent */
+  --color-accent:          #3D6B47;   /* deep moss green — primary */
+  --color-accent-hover:    #2E5236;   /* darker on hover */
+  --color-accent-subtle:   #D4E6D8;   /* tinted bg for accent areas */
+  --color-accent-glow:     rgba(61, 107, 71, 0.15);
+
+  /* Data — metric bar fills */
+  --color-forest:          #4A7C59;   /* forest cover — living green */
+  --color-ice:             #8BBCCC;   /* arctic ice — cold blue */
+  --color-co2:             #C4713A;   /* CO2 — terracotta warning */
+
+  /* Semantic */
+  --color-warning:         #D4820A;   /* amber — milestone */
+  --color-warning-bg:      #FEF3DC;   /* amber tint */
+  --color-warning-border:  #F0B840;
+  --color-danger:          #B84A3A;   /* alert red-earth */
+  --color-positive:        #3D7A52;   /* positive indicator */
+
+  /* Borders */
+  --color-border:          #D4CCBC;   /* warm divider */
+  --color-border-subtle:   #E5DFCF;   /* hairline */
+  --color-border-strong:   #A8A090;   /* prominent rule */
+
+  /* Navigation */
+  --color-nav-bg:          #1C2B1E;   /* deep forest — inverted nav */
+  --color-nav-text:        #E8E0D0;   /* warm cream on dark */
+  --color-nav-text-dim:    #9AAA9C;
+  --color-nav-border:      #2E4232;
+  --color-tab-active:      #F5F0E8;   /* active tab matches body */
+  --color-tab-active-text: #1C2B1E;
+  --color-tab-text:        #9AAA9C;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(28, 43, 30, 0.08),
+                0 1px 2px rgba(28, 43, 30, 0.06);
+  --shadow-md:  0 4px 12px rgba(28, 43, 30, 0.10),
+                0 2px 6px  rgba(28, 43, 30, 0.06);
+  --shadow-lg:  0 8px 24px rgba(28, 43, 30, 0.12),
+                0 4px 12px rgba(28, 43, 30, 0.08);
+  --shadow-xl:  0 16px 48px rgba(28, 43, 30, 0.16);
+
+  /* Metric card accents — small indicator dots */
+  --color-species:    #B84A3A;   /* species at risk — red earth */
+  --color-temp:       #C4713A;   /* temperature — amber-orange */
+  --color-sea:        #4A7A99;   /* sea level — ocean blue */
+}
+
+/* ── Dark theme ──────────────────────────────────────────── */
+[data-theme="dark"] {
+
+  /* Backgrounds — deep night earth */
+  --color-bg:              #151C14;   /* very dark forest floor */
+  --color-bg-subtle:       #1C2419;   /* slightly lifted */
+  --color-bg-raised:       #22301E;   /* card surface */
+  --color-surface:         #2A3C26;   /* highest elevation */
+  --color-surface-overlay: rgba(21, 28, 20, 0.92);
+
+  /* Foreground */
+  --color-text:            #E8E2D4;   /* warm white — field journal */
+  --color-text-secondary:  #B4AFA3;   /* dimmed */
+  --color-text-tertiary:   #7A7870;   /* further dimmed */
+  --color-text-disabled:   #4A4844;
+  --color-text-inverse:    #151C14;
+
+  /* Brand / accent */
+  --color-accent:          #7AB88A;   /* lighter sage in dark mode */
+  --color-accent-hover:    #96CCA4;
+  --color-accent-subtle:   #1E3324;
+  --color-accent-glow:     rgba(122, 184, 138, 0.18);
+
+  /* Data */
+  --color-forest:          #6FAB7A;   /* slightly lighter in dark */
+  --color-ice:             #92C8DC;
+  --color-co2:             #E08A4E;
+
+  /* Semantic */
+  --color-warning:         #E8A030;
+  --color-warning-bg:      #2A2010;
+  --color-warning-border:  #C07820;
+  --color-danger:          #D46050;
+  --color-positive:        #6FAB7A;
+
+  /* Borders */
+  --color-border:          #2E3D2A;
+  --color-border-subtle:   #222E1E;
+  --color-border-strong:   #3E5438;
+
+  /* Navigation */
+  --color-nav-bg:          #0F1610;   /* even deeper than bg */
+  --color-nav-text:        #D4CEC0;
+  --color-nav-text-dim:    #5A6A5C;
+  --color-nav-border:      #1E2A1A;
+  --color-tab-active:      #22301E;
+  --color-tab-active-text: #E8E2D4;
+  --color-tab-text:        #5A6A5C;
+
+  /* Shadows — more subtle in dark, use color-shifted */
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.3),
+                0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.35),
+                0 2px 6px  rgba(0, 0, 0, 0.2);
+  --shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.45),
+                0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-xl:  0 16px 48px rgba(0, 0, 0, 0.55);
+
+  /* Metric card accents */
+  --color-species:    #D46050;
+  --color-temp:       #E08A4E;
+  --color-sea:        #5A9AB8;
+}
+
+/* ── Theme transition ────────────────────────────────────── *
+   Applied globally so color changes animate smoothly.
+   Opt-out on elements where transition causes visual issues.
+   * ────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  transition:
+    background-color var(--transition-theme),
+    border-color     var(--transition-theme),
+    color            var(--transition-theme),
+    fill             var(--transition-theme),
+    stroke           var(--transition-theme),
+    box-shadow       var(--transition-theme);
+}
+
+/* ── System preference detection ────────────────────────── *
+   Applied before JS loads. themeToggle.js overrides with
+   [data-theme] attribute + localStorage after DOMContentLoaded.
+   * ────────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* Mirror dark theme tokens — must stay in sync with [data-theme="dark"] above */
+
+    --color-bg:              #151C14;
+    --color-bg-subtle:       #1C2419;
+    --color-bg-raised:       #22301E;
+    --color-surface:         #2A3C26;
+    --color-surface-overlay: rgba(21, 28, 20, 0.92);
+
+    --color-text:            #E8E2D4;
+    --color-text-secondary:  #B4AFA3;
+    --color-text-tertiary:   #7A7870;
+    --color-text-disabled:   #4A4844;
+    --color-text-inverse:    #151C14;
+
+    --color-accent:          #7AB88A;
+    --color-accent-hover:    #96CCA4;
+    --color-accent-subtle:   #1E3324;
+    --color-accent-glow:     rgba(122, 184, 138, 0.18);
+
+    --color-forest:          #6FAB7A;
+    --color-ice:             #92C8DC;
+    --color-co2:             #E08A4E;
+
+    --color-warning:         #E8A030;
+    --color-warning-bg:      #2A2010;
+    --color-warning-border:  #C07820;
+    --color-danger:          #D46050;
+    --color-positive:        #6FAB7A;
+
+    --color-border:          #2E3D2A;
+    --color-border-subtle:   #222E1E;
+    --color-border-strong:   #3E5438;
+
+    --color-nav-bg:          #0F1610;
+    --color-nav-text:        #D4CEC0;
+    --color-nav-text-dim:    #5A6A5C;
+    --color-nav-border:      #1E2A1A;
+    --color-tab-active:      #22301E;
+    --color-tab-active-text: #E8E2D4;
+    --color-tab-text:        #5A6A5C;
+
+    --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.3),  0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.2);
+    --shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25);
+    --shadow-xl:  0 16px 48px rgba(0, 0, 0, 0.55);
+
+    --color-species:    #D46050;
+    --color-temp:       #E08A4E;
+    --color-sea:        #5A9AB8;
+  }
+}
