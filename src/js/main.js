@@ -1,58 +1,53 @@
 /**
  * TerraEcho — main.js
- * Responsibility: Application entry point and boot sequence.
- * Imports modules and calls their init() functions in dependency order.
- * Contains NO business logic. NO DOM manipulation beyond delegating to modules.
+ * Responsibility: Application entry point and boot sequence only.
+ * Imports modules and calls init() in dependency order.
+ * No business logic. No DOM manipulation.
  *
- * Phase 1: initTheme, initTabs
- * Phase 2: + initTimelineControls, initBars, initMetricCards, initFactDisplay
- * Phase 3: + initActionCards, initImpactSummary, initMilestone
- * Phase 4: + initAudio
+ * Boot order rules:
+ *   1. Theme          — before first paint, prevents flash
+ *   2. Tabs           — before any tab-specific module runs
+ *   3. ActionsState   — before any action module reads state
+ *   4. Bars/Cards/Facts — subscribers registered before controls fire
+ *   5. TimelineControls — fires initial yearChanged after subscribers ready
+ *   6. ActionCards/Impact/Milestone — read state, subscribe to events
  */
 
 import { initTheme }            from './themeToggle.js';
 import { initTabs }             from './tabs.js';
-import { initTimelineControls } from './timelineControls.js';
+import { initActionsState }     from './state/actions.js';
 import { initBars }             from './modules/bars.js';
 import { initMetricCards }      from './modules/metricCards.js';
 import { initFactDisplay }      from './modules/factDisplay.js';
+import { initTimelineControls } from './timelineControls.js';
+import { initActionCards }      from './modules/actionCards.js';
+import { initImpactSummary }    from './modules/impactSummary.js';
+import { initMilestone }        from './modules/milestone.js';
 
-/**
- * Boot sequence — order is intentional.
- *   1. Theme     — prevents flash of wrong theme before paint
- *   2. Tabs      — wires navigation before tab-specific modules run
- *   3. Controls  — enables slider/play, publishes initial yearChanged event
- *   4. Bars      — subscribes before initial event fires (via initTimelineControls)
- *   5. Cards     — same
- *   6. Facts     — same
- *
- * Note: initTimelineControls publishes timeline:yearChanged at the end of its
- * init, so all subscriber modules (bars, metricCards, factDisplay) must be
- * initialised BEFORE initTimelineControls is called — or they will miss the
- * initial render event. Hence the order: subscribe first, then enable controls.
- */
 function boot() {
+  // Phase 1
   initTheme();
   initTabs();
 
-  // Subscribers must be registered before controls fire the first event
+  // Phase 3 state — must load before any action module reads it
+  initActionsState();
+
+  // Phase 2 subscribers — registered before controls publish first event
   initBars();
   initMetricCards();
   initFactDisplay();
 
-  // Controls init last — its final publishYearChanged() triggers all subscribers
+  // Phase 2 controls — publishes initial timeline:yearChanged
   initTimelineControls();
 
-  // ── Phase 3 additions ────────────────────────────────────
-  // initActionCards();
-  // initImpactSummary();
-  // initMilestone();
+  // Phase 3 modules — all read from initActionsState on init
+  initActionCards();
+  initImpactSummary();
+  initMilestone();
 
-  // ── Phase 4 additions ────────────────────────────────────
-  // initAudio();
+  // Phase 4: initAudio();
 }
 
-// Guard: run boot after DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
 } else {
