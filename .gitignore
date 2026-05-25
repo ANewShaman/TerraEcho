@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# ML artifacts
+*.joblib
+*.pkl
+
+# Processed data
+ml/data/processed/*.csv
+
+# Notebook junk
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
+
+# Node
+node_modules/
+
+# Build
+dist/
+build/
