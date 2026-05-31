@@ -39,3 +39,15 @@ node_modules/
 # Build
 dist/
 build/
+
+# Models — large binary files, regenerable from train.py
+ml/models/*.joblib
+
+# Metrics — generated artifact
+ml/model_metrics.json
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
